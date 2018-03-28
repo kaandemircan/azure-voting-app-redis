@@ -8,9 +8,34 @@
         function send(form){
         }
     </script>
-
+    <style>
+        * {
+          padding: 0;
+          margin: 0;
+        }
+        .fit { /* set relative picture size */
+          max-width: 100%;
+          max-height: 100%;
+        }
+        .center {
+          display: block;
+          margin: auto;
+        }
+      </style>
 </head>
 <body>
+    <img class="center fit" src="https://www.microsoftevents.com//accounts/register123/microsoft/msft-v1/c-and-e-v2/events/ce2-me-2c-mec0006976/32978-OSS-Summit-Banner-(3000x300)11.png" >    
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" language="JavaScript">
+        function set_body_height() { // set body height = window height
+             $('body').height($(window).height());
+        }
+        $(document).ready(function() {
+            $(window).bind('resize', set_body_height);
+            set_body_height();
+        });
+    </script>
+
     <div id="container">
         <form id="form" name="form" action="/"" method="post"><center>
         <div id="logo">{{title}}</div>
@@ -18,7 +43,9 @@
         <div id="form">
         <button name="vote" value="{{button1}}" onclick="send()" class="button button1">{{button1}}</button>
         <button name="vote" value="{{button2}}" onclick="send()" class="button button2">{{button2}}</button>
-        <!--<button name="vote" value="{{button3}}" onclick="send()" class="button button3">{{button3}}</button>-->
+        <!--
+        <button name="vote" value="{{button3}}" onclick="send()" class="button button3">{{button3}}</button>
+        -->
         <!--<button name="vote" value="reset" onclick="send()" class="button button3">Reset</button>-->
         <div id="space"></div>
         <div id="space"></div>
