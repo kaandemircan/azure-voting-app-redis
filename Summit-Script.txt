@@ -1,0 +1,45 @@
+git clone https://github.com/kaandemircan/azure-voting-app-redis.git
+docker-compose up --build -d
+docker ps
+
+# Go to http://localhost:8080/ from browser.
+
+# Explain and show Azure Container Registry
+az acr login --name k8sregis
+docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v1
+docker push k8sregis.azurecr.io/azure-vote-front:v1
+
+az acr repository list --name k8sregis --output table
+az acr repository show-tags --name k8sregis --repository azure-vote-front --output table
+
+# Show Azure Container Service (AKS)
+az aks get-credentials --resource-group=eastus --name=k8s-cluster
+kubectl get nodes
+
+# Change azure-vote-all-in-one-redis.yaml with registry host
+kubectl create -f azure-vote-all-in-one-redis.yaml
+
+# Explain ACS and AKS, also what we have done so far
+
+kubectl get service azure-vote-front --watch
+
+# Make changes to add MacOS
+docker-compose up --build -d
+az acr login --name k8sregis
+docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v2
+docker push k8sregis.azurecr.io/azure-vote-front:v2
+kubectl set image deployment azure-vote-front azure-vote-front=k8sregis.azurecr.io/azure-vote-front:v2
+kubectl get service azure-vote-front
+
+# Scale the app now before voting
+kubectl scale --replicas=3 deployment/azure-vote-front
+kubectl get pod
+
+# Monitoring?
+az aks browse --name k8s-cluster --resource-group eastus
+
+# How do we upgrade?
+az aks get-upgrades --name k8s-cluster --resource-group eastus --output table
+az aks upgrade --name k8s-cluster --resource-group eastus --kubernetes-version 1.8.7
+
+az aks show --name k8s-cluster --resource-group eastus --output table
