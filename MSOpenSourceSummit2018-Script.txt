@@ -1,10 +1,21 @@
+# 
+# This is the demo script that will be used at the Microsoft Open Source Summit 2018 in Istanbul
+# 
+# Author: Kaan Demircan
+# 
+
+# Get the code
 git clone https://github.com/kaandemircan/azure-voting-app-redis.git
+
+# Build the code
 docker-compose up --build -d
 docker ps
 
 # Go to http://localhost:8080/ from browser.
 
 # Explain and show Azure Container Registry
+
+# Show
 az acr login --name k8sregis
 docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v1
 docker push k8sregis.azurecr.io/azure-vote-front:v1
