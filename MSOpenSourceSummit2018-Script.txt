@@ -32,6 +32,7 @@ kubectl create -f azure-vote-all-in-one-redis.yaml
 
 # Explain ACS and AKS, also what we have done so far
 
+kubectl describe  service azure-vote-front
 kubectl get service azure-vote-front --watch
 
 # Make changes to add MacOS
