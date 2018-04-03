@@ -15,31 +15,35 @@ docker ps
 
 # Explain and show Azure Container Registry
 
-# Show
+# Login to ACR and upload app v1
 az acr login --name k8sregis
 docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v1
 docker push k8sregis.azurecr.io/azure-vote-front:v1
 
+# Show ACR repo and app
 az acr repository list --name k8sregis --output table
 az acr repository show-tags --name k8sregis --repository azure-vote-front --output table
 
 # Show Azure Container Service (AKS)
-az aks get-credentials --resource-group=eastus --name=k8s-cluster
+az aks get-credentials --resource-group=eastus --name=k8s
 kubectl get nodes
 
-# Change azure-vote-all-in-one-redis.yaml with registry host
+# Change azure-vote-all-in-one-redis.yaml with registry host and run
 kubectl create -f azure-vote-all-in-one-redis.yaml
 
-# Explain ACS and AKS, also what we have done so far
-
+# Watch app, explain ACS and AKS, recap what we have done so far
 kubectl describe  service azure-vote-front
 kubectl get service azure-vote-front --watch
 
-# Make changes to add MacOS
+# Make changes to add MacOS option and iPhone support
 docker-compose up --build -d
 az acr login --name k8sregis
+
+# Upload app v2 to ACR
 docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v2
 docker push k8sregis.azurecr.io/azure-vote-front:v2
+
+# Deploy v2 of app
 kubectl set image deployment azure-vote-front azure-vote-front=k8sregis.azurecr.io/azure-vote-front:v2
 kubectl get service azure-vote-front
 
@@ -47,11 +51,12 @@ kubectl get service azure-vote-front
 kubectl scale --replicas=3 deployment/azure-vote-front
 kubectl get pod
 
-# Monitoring?
-az aks browse --name k8s-cluster --resource-group eastus
+# Monitoring, GUI
+az aks browse --name k8s --resource-group eastus
 
 # How do we upgrade?
-az aks get-upgrades --name k8s-cluster --resource-group eastus --output table
-az aks upgrade --name k8s-cluster --resource-group eastus --kubernetes-version 1.8.7
+az aks get-upgrades --name k8s --resource-group eastus --output table
 
-az aks show --name k8s-cluster --resource-group eastus --output table
+# Upgrade k8s
+az aks upgrade --name k8s --resource-group eastus --kubernetes-version 1.9.2
+az aks show --name k8s --resource-group eastus --output table
