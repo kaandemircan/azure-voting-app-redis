@@ -32,20 +32,20 @@ kubectl get nodes
 kubectl create -f azure-vote-all-in-one-redis.yaml
 
 # Watch app, explain ACS and AKS, recap what we have done so far
-kubectl describe  service azure-vote-front
+kubectl describe service azure-vote-front
 kubectl get service azure-vote-front --watch
 
 # Make changes to add MacOS option and iPhone support
 docker-compose up --build -d
-az acr login --name k8sregis
 
 # Upload app v2 to ACR
+az acr login --name k8sregis
 docker tag azure-vote-front k8sregis.azurecr.io/azure-vote-front:v2
 docker push k8sregis.azurecr.io/azure-vote-front:v2
 
 # Deploy v2 of app
 kubectl set image deployment azure-vote-front azure-vote-front=k8sregis.azurecr.io/azure-vote-front:v2
-kubectl get service azure-vote-front
+kubectl describe service azure-vote-front
 
 # Scale the app now before voting
 kubectl scale --replicas=3 deployment/azure-vote-front
